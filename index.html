@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+</head>
+
+<body>
+  <label for="barcode">Barcode:</label>
+  <input type="text" id="barcode" name="barcode">
+  <input id="run" type="button" value="Check" />
+  <hr />
+  <h2>Key</h2>
+  <p>STF is Staff, SCM is committee member, MED is media team, STU is student, EXT is external</p>
+  <p>IMPORTANT: B-1 is balcony 1, B-2 is balcony 2 and B-3 is balcony 3, make sure to send to right staircase</p>
+  <p>UNA is unassigned, direct them to back rows of ground floor</p>
+  <hr />
+  <h2>Result</h2>
+  <p><strong>OUTPUT:</strong></p>
+  <p id="output"></p>
+  <p><strong>TYPE OF TICKET:</strong></p>
+  <p id="type"></p>
+  <p><strong>NAME ON TICKET:</strong></p>
+  <p id="name"></p>
+  <p><strong>AMOUNT OF GUESTS:</strong></p>
+  <p id="amount"></p>
+  <script>
+
+    var data = {
+        "1000073": {
+          "type": "UNA",
+          "name": "Roderick Melissen",
+          "amount": 5
+        },
+        "1000146": {
+          "type": "UNA",
+          "name": "Matilde Ramos Oliveira",
+          "amount": 2
+        },
+        "1000163": {
+          "type": "STU",
+          "name": "Aaraav Ovalekar",
+          "amount": 1
+        },
+        "1000167": {
+          "type": "SCM",
+          "name": "Abhishek Pillai",
+          "amount": 1
+        },
+        "1000173": {
+          "type": "B-1",
+          "name": "Alan Edwin",
+          "amount": 3
+        },
+        "1000179": {
+          "type": "B-2",
+          "name": "Blanche Kortulewski",
+          "amount": 3
+        },
+        "1000219": {
+          "type": "UNA",
+          "name": "Katya Shevchenko",
+          "amount": 1
+        },
+        "1000292": {
+          "type": "UNA",
+          "name": "Michael Bennett",
+          "amount": 3
+        },
+        "1000326": {
+          "type": "STU",
+          "name": "Aashna Tejas Patel",
+          "amount": 1
+        },
+        "1000334": {
+          "type": "SCM",
+          "name": "Alan Edwin",
+          "amount": 1
+        },
+        "1000346": {
+          "type": "B-1",
+          "name": "Ella Rausch",
+          "amount": 3
+        },
+        "1000358": {
+          "type": "B-2",
+          "name": "Jade de Groot",
+          "amount": 3
+        },
+        "1000362": {
+          "type": "B-3",
+          "name": "Ari Bassey",
+          "amount": 2
+        },
+        "1000365": {
+          "type": "UNA",
+          "name": "Lemo Mogodi",
+          "amount": 2
+        },
+        "1000401": {
+          "type": "MED",
+          "name": "Olive Webster",
+          "amount": 2
+        },
+        "1000438": {
+          "type": "UNA",
+          "name": "Demir Sakızlıoğlu",
+          "amount": 2
+        },
+        "1000489": {
+          "type": "STU",
+          "name": "Aina Nojima",
+          "amount": 1
+        },
+        "1000501": {
+          "type": "SCM",
+          "name": "Anisha Mitra",
+          "amount": 1
+        },
+        "1000511": {
+          "type": "UNA",
+          "name": "Mikołaj Oworuszko",
+          "amount": 2
+        },
+        "1000519": {
+          "type": "B-1",
+          "name": "Shaked Sasson",
+          "amount": 3
+        },
+        "1000537": {
+          "type": "B-2",
+          "name": "Kevin Haver",
+          "amount": 3
+        },
+        "1000543": {
+          "type": "B-3",
+          "name": "Sonia Nair",
+          "amount": 4
+        },
+        "1000584": {
+          "type": "UNA",
+          "name": "Luca Guarin Stilson",
+          "amount": 4
+        },
+        "1000601": {
+          "type": "STF",
+          "name": "Katherine MacKenzie",
+          "amount": 1
+        },
+        "1000652": {
+          "type": "STU",
+          "name": "Alexander Carlson",
+          "amount": 1
+        },
+        "1000657": {
+          "type": "UNA",
+          "name": "Nellie Ullbrand",
+          "amount": 3
+        },
+        "1000668": {
+          "type": "SCM",
+          "name": "Ari Bassey",
+          "amount": 1
+        },
+        "1000692": {
+          "type": "B-1",
+          "name": "Daphne Wegenaar",
+          "amount": 3
+        },
+        "1000716": {
+          "type": "B-2",
+          "name": "Archisha Gaur",
+          "amount": 3
+        },
+        "1000724": {
+          "type": "B-3",
+          "name": "Tanvi Bujala",
+          "amount": 4
+        },
+        "1000730": {
+          "type": "UNA",
+          "name": "Siddharth Pradeep",
+          "amount": 3
+        },
+        "1000802": {
+          "type": "MED",
+          "name": "Siann Rana",
+          "amount": 2
+        },
+        "1000803": {
+          "type": "UNA",
+          "name": "Madi Bassigarayev",
+          "amount": 2
+        },
+        "1000815": {
+          "type": "STU",
+          "name": "Amy Michaela McKay",
+          "amount": 1
+        },
+        "1000835": {
+          "type": "SCM",
+          "name": "Ava Gay",
+          "amount": 1
+        },
+        "1000865": {
+          "type": "B-1",
+          "name": "Iona Saville",
+          "amount": 3
+        },
+        "1000876": {
+          "type": "UNA",
+          "name": "Daniel Schram",
+          "amount": 2
+        },
+        "1000895": {
+          "type": "B-2",
+          "name": "Kravtsiv Nikita",
+          "amount": 3
+        },
+        "1000905": {
+          "type": "B-3",
+          "name": "Oluwafeyikemi Layioye",
+          "amount": 2
+        },
+        "1000949": {
+          "type": "UNA",
+          "name": "Aleksandre Kochiashvili",
+          "amount": 2
+        },
+        "1000978": {
+          "type": "STU",
+          "name": "Anastasia Zeilstra",
+          "amount": 1
+        },
+        "1001002": {
+          "type": "SCM",
+          "name": "Goncalo Lopes Madeira Lau",
+          "amount": 1
+        },
+        "1001022": {
+          "type": "UNA",
+          "name": "Francesco Procopio",
+          "amount": 3
+        },
+        "1001038": {
+          "type": "B-1",
+          "name": "Neha Chandrikasingh",
+          "amount": 3
+        },
+        "1001074": {
+          "type": "B-2",
+          "name": "Takuma Shinohara",
+          "amount": 1
+        },
+        "1001086": {
+          "type": "B-3",
+          "name": "Tal Turksma",
+          "amount": 2
+        },
+        "1001095": {
+          "type": "UNA",
+          "name": "Katherine Throup San Juan",
+          "amount": 4
+        },
+        "1001141": {
+          "type": "STU",
+          "name": "Anna Schwarz",
+          "amount": 1
+        },
+        "1001168": {
+          "type": "UNA",
+          "name": "Rafal Potega",
+          "amount": 3
+        },
+        "1001169": {
+          "type": "SCM",
+          "name": "Iona Saville",
+          "amount": 1
+        },
+        "1001202": {
+          "type": "STF",
+          "name": "Fred Poeser",
+          "amount": 1
+        },
+        "1001203": {
+          "type": "MED",
+          "name": "Viraj Rao",
+          "amount": 2
+        },
+        "1001211": {
+          "type": "B-1",
+          "name": "Oliver Huerta Shuman",
+          "amount": 2
+        },
+        "1001241": {
+          "type": "UNA",
+          "name": "Nikita Iskortev",
+          "amount": 3
+        },
+        "1001253": {
+          "type": "B-2",
+          "name": "Jenna Cupido",
+          "amount": 3
+        },
+        "1001267": {
+          "type": "B-3",
+          "name": "Constanza Lozano Torres",
+          "amount": 4
+        },
+        "1001304": {
+          "type": "STU",
+          "name": "Archisha Gaur",
+          "amount": 1
+        },
+        "1001314": {
+          "type": "UNA",
+          "name": "Pars Cumali",
+          "amount": 3
+        },
+        "1001336": {
+          "type": "SCM",
+          "name": "Jeel Chandan",
+          "amount": 1
+        },
+        "1001384": {
+          "type": "B-1",
+          "name": "Tal Turksma",
+          "amount": 3
+        },
+        "1001387": {
+          "type": "UNA",
+          "name": "Martin Prate",
+          "amount": 2
+        },
+        "1001432": {
+          "type": "B-2",
+          "name": "Gabriela Kuzbiel",
+          "amount": 3
+        },
+        "1001448": {
+          "type": "B-3",
+          "name": "Bianca Hernandez Laurie",
+          "amount": 2
+        },
+        "1001460": {
+          "type": "UNA",
+          "name": "Jalen Kamenski Ivankovic",
+          "amount": 3
+        },
+        "1001467": {
+          "type": "STU",
+          "name": "Arnav Avinash Prachande",
+          "amount": 1
+        },
+        "1001503": {
+          "type": "SCM",
+          "name": "Kravtsiv Nikita",
+          "amount": 1
+        },
+        "1001533": {
+          "type": "UNA",
+          "name": "Alec Lichko",
+          "amount": 3
+        },
+        "1001557": {
+          "type": "B-1",
+          "name": "Tejovardhan Khati",
+          "amount": 3
+        },
+        "1001604": {
+          "type": "MED",
+          "name": "Savar Ramharakh",
+          "amount": 2
+        },
+        "1001606": {
+          "type": "UNA",
+          "name": "Evgenia Leonardivna Schwartz (Jenny)",
+          "amount": 2
+        },
+        "1001611": {
+          "type": "B-2",
+          "name": "Alexander Carlson",
+          "amount": 1
+        },
+        "1001629": {
+          "type": "B-3",
+          "name": "Srinidhi Batchu",
+          "amount": 5
+        },
+        "1001630": {
+          "type": "STU",
+          "name": "Arsshiya Adarsh Sreepriya",
+          "amount": 1
+        },
+        "1001670": {
+          "type": "SCM",
+          "name": "Mariska Judd",
+          "amount": 1
+        },
+        "1001679": {
+          "type": "UNA",
+          "name": "Cem Saygivar",
+          "amount": 2
+        },
+        "1001730": {
+          "type": "B-1",
+          "name": "Gia Amin",
+          "amount": 3
+        },
+        "1001752": {
+          "type": "UNA",
+          "name": "Mateo Frasson",
+          "amount": 2
+        },
+        "1001790": {
+          "type": "B-2",
+          "name": "Hriday Sen",
+          "amount": 2
+        },
+        "1001793": {
+          "type": "STU",
+          "name": "Avery Berry",
+          "amount": 1
+        },
+        "1001803": {
+          "type": "STF",
+          "name": "Jeroen Donkersloot",
+          "amount": 1
+        },
+        "1001810": {
+          "type": "B-3",
+          "name": "Michael Bennett",
+          "amount": 1
+        },
+        "1001825": {
+          "type": "UNA",
+          "name": "Edoardo Zeni",
+          "amount": 4
+        },
+        "1001837": {
+          "type": "SCM",
+          "name": "Neha Chandrikasingh",
+          "amount": 1
+        },
+        "1001898": {
+          "type": "UNA",
+          "name": "Aryan Narvekar",
+          "amount": 2
+        },
+        "1001903": {
+          "type": "B-1",
+          "name": "Reece Clark",
+          "amount": 3
+        },
+        "1001956": {
+          "type": "STU",
+          "name": "Ayeesha Worgan",
+          "amount": 1
+        },
+        "1001969": {
+          "type": "B-2",
+          "name": "Vedant Wani",
+          "amount": 3
+        },
+        "1001971": {
+          "type": "SPC",
+          "name": "Family of Ivana Kirkova",
+          "amount": 3
+        },
+        "1001991": {
+          "type": "B-3",
+          "name": "Ophelia Summerscales",
+          "amount": 5
+        },
+        "1002004": {
+          "type": "SCM",
+          "name": "Nella Bylon Regis",
+          "amount": 1
+        },
+        "1002005": {
+          "type": "MED",
+          "name": "Ke Huang",
+          "amount": 2
+        },
+        "1002076": {
+          "type": "B-1",
+          "name": "Sam Costers",
+          "amount": 3
+        },
+        "1002119": {
+          "type": "STU",
+          "name": "Belén Bolhuis",
+          "amount": 1
+        },
+        "1002148": {
+          "type": "B-2",
+          "name": "Theodor Alvarado",
+          "amount": 2
+        },
+        "1002171": {
+          "type": "SCM",
+          "name": "Parmis Yahoo",
+          "amount": 1
+        },
+        "1002172": {
+          "type": "B-3",
+          "name": "Alan Edwin",
+          "amount": 1
+        },
+        "1002249": {
+          "type": "B-1",
+          "name": "Arsshiya Adarsh Sreepriya",
+          "amount": 3
+        },
+        "1002282": {
+          "type": "STU",
+          "name": "Bianca Hernandez Laurie",
+          "amount": 1
+        },
+        "1002327": {
+          "type": "B-2",
+          "name": "Lea Lichter",
+          "amount": 3
+        },
+        "1002338": {
+          "type": "SCM",
+          "name": "Rushil Baya",
+          "amount": 1
+        },
+        "1002353": {
+          "type": "B-3",
+          "name": "Juliette Susan Claire Marie Toole",
+          "amount": 5
+        },
+        "1002404": {
+          "type": "STF",
+          "name": "Frederik Blokzijl",
+          "amount": 1
+        },
+        "1002406": {
+          "type": "MED",
+          "name": "Scarlett Davies",
+          "amount": 2
+        },
+        "1002422": {
+          "type": "B-1",
+          "name": "Belén Bolhuis",
+          "amount": 3
+        },
+        "1002445": {
+          "type": "STU",
+          "name": "Blanche Kortulewski",
+          "amount": 1
+        },
+        "1002505": {
+          "type": "SCM",
+          "name": "Sonia Nair",
+          "amount": 1
+        },
+        "1002506": {
+          "type": "B-2",
+          "name": "Hana Pertwee",
+          "amount": 3
+        },
+        "1002534": {
+          "type": "B-3",
+          "name": "Vedant Wani",
+          "amount": 2
+        },
+        "1002595": {
+          "type": "B-1",
+          "name": "Solveig Strauss",
+          "amount": 3
+        },
+        "1002608": {
+          "type": "STU",
+          "name": "Constanza Lozano Torres",
+          "amount": 1
+        },
+        "1002672": {
+          "type": "SCM",
+          "name": "Srinidhi Batchu",
+          "amount": 1
+        },
+        "1002685": {
+          "type": "B-2",
+          "name": "Jeel Chandan",
+          "amount": 3
+        },
+        "1002715": {
+          "type": "B-3",
+          "name": "Rushil Baya",
+          "amount": 4
+        },
+        "1002768": {
+          "type": "B-1",
+          "name": "Avery Berry",
+          "amount": 3
+        },
+        "1002771": {
+          "type": "STU",
+          "name": "Dagne Casias",
+          "amount": 1
+        },
+        "1002807": {
+          "type": "MED",
+          "name": "Fatima Diongue",
+          "amount": 2
+        },
+        "1002839": {
+          "type": "SCM",
+          "name": "Vedant Wani",
+          "amount": 1
+        },
+        "1002864": {
+          "type": "B-2",
+          "name": "Joaquin van Berkum",
+          "amount": 5
+        },
+        "1002896": {
+          "type": "B-3",
+          "name": "John Henry Harrison",
+          "amount": 4
+        },
+        "1002934": {
+          "type": "STU",
+          "name": "Daphne Wegenaar",
+          "amount": 1
+        },
+        "1002941": {
+          "type": "B-1",
+          "name": "Amy Michaela McKay",
+          "amount": 4
+        },
+        "1003005": {
+          "type": "STF",
+          "name": "Anita Chen",
+          "amount": 1
+        },
+        "1003006": {
+          "type": "SCM",
+          "name": "Matilde Ramos Oliveira",
+          "amount": 1
+        },
+        "1003043": {
+          "type": "B-2",
+          "name": "Nella Bylon Regis",
+          "amount": 4
+        },
+        "1003077": {
+          "type": "B-3",
+          "name": "Ellies Ward",
+          "amount": 4
+        },
+        "1003097": {
+          "type": "STU",
+          "name": "Dariana Anyosa Barco",
+          "amount": 1
+        },
+        "1003114": {
+          "type": "B-1",
+          "name": "Anisha Mitra",
+          "amount": 3
+        },
+        "1003173": {
+          "type": "SCM",
+          "name": "Katya Shevchenko",
+          "amount": 1
+        },
+        "1003208": {
+          "type": "MED",
+          "name": "Tarling Gorgun",
+          "amount": 2
+        },
+        "1003222": {
+          "type": "B-2",
+          "name": "Mishko O'Connor",
+          "amount": 5
+        },
+        "1003258": {
+          "type": "B-3",
+          "name": "Riley Berneace Herod",
+          "amount": 5
+        },
+        "1003260": {
+          "type": "STU",
+          "name": "Diana Murariu",
+          "amount": 1
+        },
+        "1003287": {
+          "type": "B-1",
+          "name": "Dagne Casias",
+          "amount": 3
+        },
+        "1003401": {
+          "type": "B-2",
+          "name": "Valeria Peñaranda Rodríguez",
+          "amount": 5
+        },
+        "1003423": {
+          "type": "STU",
+          "name": "Dominica Beningfield",
+          "amount": 1
+        },
+        "1003439": {
+          "type": "B-3",
+          "name": "Maximillian Teerlink",
+          "amount": 5
+        },
+        "1003460": {
+          "type": "B-1",
+          "name": "Abhishek Pillai",
+          "amount": 3
+        },
+        "1003580": {
+          "type": "B-2",
+          "name": "Koen Rijnders",
+          "amount": 5
+        },
+        "1003586": {
+          "type": "STU",
+          "name": "Elad Weczerebin",
+          "amount": 1
+        },
+        "1003606": {
+          "type": "STF",
+          "name": "Erin Kridichart",
+          "amount": 1
+        },
+        "1003609": {
+          "type": "MED",
+          "name": "Pranavi Krishnasetty",
+          "amount": 2
+        },
+        "1003620": {
+          "type": "B-3",
+          "name": "Dominica Beningfield",
+          "amount": 4
+        },
+        "1003633": {
+          "type": "B-1",
+          "name": "Poppy Grace Stewart Farr",
+          "amount": 2
+        },
+        "1003749": {
+          "type": "STU",
+          "name": "Ella Rausch",
+          "amount": 1
+        },
+        "1003759": {
+          "type": "B-2",
+          "name": "Ramzy Noakes",
+          "amount": 5
+        },
+        "1003801": {
+          "type": "B-3",
+          "name": "Levani Vancko",
+          "amount": 3
+        },
+        "1003806": {
+          "type": "B-1",
+          "name": "Aashna Tejas Patel",
+          "amount": 3
+        },
+        "1003912": {
+          "type": "STU",
+          "name": "Ellies Ward",
+          "amount": 1
+        },
+        "1003938": {
+          "type": "B-2",
+          "name": "Sarina Rhmaty",
+          "amount": 5
+        },
+        "1003979": {
+          "type": "B-1",
+          "name": "Fedde Vreeken",
+          "amount": 3
+        },
+        "1003982": {
+          "type": "B-3",
+          "name": "Teun Vuursteen",
+          "amount": 3
+        },
+        "1004010": {
+          "type": "MED",
+          "name": "Amogh Verma",
+          "amount": 2
+        },
+        "1004075": {
+          "type": "STU",
+          "name": "Eloy Diallo Puga",
+          "amount": 1
+        },
+        "1004117": {
+          "type": "B-2",
+          "name": "Diana Murariu",
+          "amount": 4
+        },
+        "1004152": {
+          "type": "B-1",
+          "name": "Ori Attal",
+          "amount": 2
+        },
+        "1004163": {
+          "type": "B-3",
+          "name": "Helena Huipe",
+          "amount": 2
+        },
+        "1004207": {
+          "type": "STF",
+          "name": "Edina Lamberts-Papp",
+          "amount": 1
+        },
+        "1004238": {
+          "type": "STU",
+          "name": "Emilia Elias",
+          "amount": 1
+        },
+        "1004325": {
+          "type": "B-1",
+          "name": "Ayeesha Worgan",
+          "amount": 2
+        },
+        "1004344": {
+          "type": "B-3",
+          "name": "Ari Bassey",
+          "amount": 4
+        },
+        "1004401": {
+          "type": "STU",
+          "name": "Fedde Vreeken",
+          "amount": 1
+        },
+        "1004411": {
+          "type": "MED",
+          "name": "Kevin Fang",
+          "amount": 2
+        },
+        "1004475": {
+          "type": "B-2",
+          "name": "Yash Raghavan",
+          "amount": 4
+        },
+        "1004498": {
+          "type": "B-1",
+          "name": "Kiera Cathrall",
+          "amount": 3
+        },
+        "1004525": {
+          "type": "B-3",
+          "name": "Anya Dolgushina",
+          "amount": 3
+        },
+        "1004564": {
+          "type": "STU",
+          "name": "Gabriela Kuzbiel",
+          "amount": 1
+        },
+        "1004654": {
+          "type": "B-2",
+          "name": "Anastasia Zeilstra",
+          "amount": 4
+        },
+        "1004671": {
+          "type": "B-1",
+          "name": "Mercedes León y Castillo Aguilar - Tablada",
+          "amount": 3
+        },
+        "1004706": {
+          "type": "B-3",
+          "name": "Pablo Amaris Paul",
+          "amount": 2
+        },
+        "1004727": {
+          "type": "STU",
+          "name": "Gia Amin",
+          "amount": 1
+        },
+        "1004808": {
+          "type": "STF",
+          "name": "Henno van Beek",
+          "amount": 1
+        },
+        "1004833": {
+          "type": "B-2",
+          "name": "Lotta Hellemons",
+          "amount": 5
+        },
+        "1004844": {
+          "type": "B-1",
+          "name": "Ilaria Volpe Rinonapoli",
+          "amount": 3
+        },
+        "1004887": {
+          "type": "B-3",
+          "name": "Paxton Scott-Hayes",
+          "amount": 4
+        },
+        "1004890": {
+          "type": "STU",
+          "name": "Giulia Longo",
+          "amount": 1
+        },
+        "1005012": {
+          "type": "B-2",
+          "name": "Giulia Longo",
+          "amount": 4
+        },
+        "1005017": {
+          "type": "B-1",
+          "name": "Parmis Yahoo",
+          "amount": 3
+        },
+        "1005053": {
+          "type": "STU",
+          "name": "Hana Pertwee",
+          "amount": 1
+        },
+        "1005068": {
+          "type": "B-3",
+          "name": "Rishabh Kurup",
+          "amount": 4
+        },
+        "1005190": {
+          "type": "B-1",
+          "name": "Shaquil Buyne",
+          "amount": 1
+        },
+        "1005191": {
+          "type": "B-2",
+          "name": "Emilia Elias",
+          "amount": 5
+        },
+        "1005216": {
+          "type": "STU",
+          "name": "Heather Anne Swan",
+          "amount": 1
+        },
+        "1005363": {
+          "type": "B-1",
+          "name": "Ritu Singh",
+          "amount": 3
+        },
+        "1005370": {
+          "type": "B-2",
+          "name": "Selin Ogretmen",
+          "amount": 4
+        },
+        "1005379": {
+          "type": "STU",
+          "name": "Helena Huipe",
+          "amount": 1
+        },
+        "1005409": {
+          "type": "STF",
+          "name": "Louise Smit",
+          "amount": 1
+        },
+        "1005536": {
+          "type": "B-1",
+          "name": "Oluwafeyikemi Layioye",
+          "amount": 3
+        },
+        "1005542": {
+          "type": "STU",
+          "name": "Hriday Sen",
+          "amount": 1
+        },
+        "1005549": {
+          "type": "B-2",
+          "name": "Iona Saville",
+          "amount": 2
+        },
+        "1005705": {
+          "type": "STU",
+          "name": "Ilaria Volpe Rinonapoli",
+          "amount": 1
+        },
+        "1005709": {
+          "type": "B-1",
+          "name": "Ava Gay",
+          "amount": 3
+        },
+        "1005728": {
+          "type": "B-2",
+          "name": "Parmis Yahoo",
+          "amount": 1
+        },
+        "1005868": {
+          "type": "STU",
+          "name": "Jade de Groot",
+          "amount": 1
+        },
+        "1005882": {
+          "type": "B-1",
+          "name": "Razan Talha",
+          "amount": 3
+        },
+        "1005907": {
+          "type": "B-2",
+          "name": "Ava Gay",
+          "amount": 1
+        },
+        "1006010": {
+          "type": "STF",
+          "name": "Marja-Ilona Koski",
+          "amount": 1
+        },
+        "1006031": {
+          "type": "STU",
+          "name": "Jenna Cupido",
+          "amount": 1
+        },
+        "1006055": {
+          "type": "B-1",
+          "name": "Noam Kunst",
+          "amount": 3
+        },
+        "1006194": {
+          "type": "STU",
+          "name": "Joaquin van Berkum",
+          "amount": 1
+        },
+        "1006228": {
+          "type": "B-1",
+          "name": "Heather Anne Swan",
+          "amount": 3
+        },
+        "1006357": {
+          "type": "STU",
+          "name": "John Henry Harrison",
+          "amount": 1
+        },
+        "1006401": {
+          "type": "B-1",
+          "name": "Aaraav Ovalekar",
+          "amount": 2
+        },
+        "1006520": {
+          "type": "STU",
+          "name": "Juliette Susan Claire Marie Toole",
+          "amount": 1
+        },
+        "1006574": {
+          "type": "B-1",
+          "name": "Elad Weczerebin",
+          "amount": 3
+        },
+        "1006611": {
+          "type": "STF",
+          "name": "Nicky Samsom",
+          "amount": 1
+        },
+        "1006683": {
+          "type": "STU",
+          "name": "Kevin Haver",
+          "amount": 1
+        },
+        "1006747": {
+          "type": "B-1",
+          "name": "Riya Sivakumar",
+          "amount": 2
+        },
+        "1006846": {
+          "type": "STU",
+          "name": "Kiera Cathrall",
+          "amount": 1
+        },
+        "1006920": {
+          "type": "B-1",
+          "name": "Shu Fang",
+          "amount": 2
+        },
+        "1007009": {
+          "type": "STU",
+          "name": "Koen Rijnders",
+          "amount": 1
+        },
+        "1007093": {
+          "type": "B-1",
+          "name": "Bianca Hernandez Laurie",
+          "amount": 3
+        },
+        "1007172": {
+          "type": "STU",
+          "name": "Layasri Leela",
+          "amount": 1
+        },
+        "1007212": {
+          "type": "STF",
+          "name": "Dragana Eric",
+          "amount": 1
+        },
+        "1007266": {
+          "type": "B-1",
+          "name": "Zoya Gajewska",
+          "amount": 3
+        },
+        "1007335": {
+          "type": "STU",
+          "name": "Lea Lichter",
+          "amount": 1
+        },
+        "1007439": {
+          "type": "B-1",
+          "name": "Mohid Junaid",
+          "amount": 3
+        },
+        "1007498": {
+          "type": "STU",
+          "name": "Levani Vancko",
+          "amount": 1
+        },
+        "1007612": {
+          "type": "B-1",
+          "name": "Eloy Diallo Puga",
+          "amount": 3
+        },
+        "1007661": {
+          "type": "STU",
+          "name": "Lotta Hellemons",
+          "amount": 1
+        },
+        "1007785": {
+          "type": "B-1",
+          "name": "Anna Schwarz",
+          "amount": 3
+        },
+        "1007813": {
+          "type": "STF",
+          "name": "Ceciel Barends",
+          "amount": 1
+        },
+        "1007824": {
+          "type": "STU",
+          "name": "Louis Raphael Ernest Amado",
+          "amount": 1
+        },
+        "1007958": {
+          "type": "B-1",
+          "name": "Arnav Avinash Prachande",
+          "amount": 2
+        },
+        "1007987": {
+          "type": "STU",
+          "name": "Maximillian Teerlink",
+          "amount": 1
+        },
+        "1008131": {
+          "type": "B-1",
+          "name": "Shivansh Gupta",
+          "amount": 3
+        },
+        "1008150": {
+          "type": "STU",
+          "name": "Mercedes León y Castillo Aguilar - Tablada",
+          "amount": 1
+        },
+        "1008304": {
+          "type": "B-1",
+          "name": "Zhenghan Zhong",
+          "amount": 2
+        },
+        "1008313": {
+          "type": "STU",
+          "name": "Michael Bennett",
+          "amount": 1
+        },
+        "1008414": {
+          "type": "STF",
+          "name": "Nienke Trap",
+          "amount": 1
+        },
+        "1008476": {
+          "type": "STU",
+          "name": "Mishko O'Connor",
+          "amount": 1
+        },
+        "1008477": {
+          "type": "B-1",
+          "name": "Dariana Anyosa Barco",
+          "amount": 3
+        },
+        "1008639": {
+          "type": "STU",
+          "name": "Mohid Junaid",
+          "amount": 1
+        },
+        "1008802": {
+          "type": "STU",
+          "name": "Noam Kunst",
+          "amount": 1
+        },
+        "1008823": {
+          "type": "B-1",
+          "name": "Louis Raphael Ernest Amado",
+          "amount": 3
+        },
+        "1008965": {
+          "type": "STU",
+          "name": "Oliver Huerta Shuman",
+          "amount": 1
+        },
+        "1008996": {
+          "type": "B-1",
+          "name": "Aina Nojima",
+          "amount": 2
+        },
+        "1009015": {
+          "type": "STF",
+          "name": "Daphne Krepel",
+          "amount": 1
+        },
+        "1009128": {
+          "type": "STU",
+          "name": "Oluwafeyikemi Layioye",
+          "amount": 1
+        },
+        "1009169": {
+          "type": "B-1",
+          "name": "Mariska Judd",
+          "amount": 1
+        },
+        "1009291": {
+          "type": "STU",
+          "name": "Ophélia Summerscales",
+          "amount": 1
+        },
+        "1009342": {
+          "type": "B-1",
+          "name": "Gonçalo Lopes Madeira Lau",
+          "amount": 5
+        },
+        "1009454": {
+          "type": "STU",
+          "name": "Ori Attal",
+          "amount": 1
+        },
+        "1009616": {
+          "type": "STF",
+          "name": "Immy Niemeijer",
+          "amount": 1
+        },
+        "1009617": {
+          "type": "STU",
+          "name": "Paxton Scott-Hayes",
+          "amount": 1
+        },
+        "1009780": {
+          "type": "STU",
+          "name": "Poppy Grace Stewart Farr",
+          "amount": 1
+        },
+        "1009943": {
+          "type": "STU",
+          "name": "Ramzy Noakes",
+          "amount": 1
+        },
+        "1010106": {
+          "type": "STU",
+          "name": "Razan Talha",
+          "amount": 1
+        },
+        "1010217": {
+          "type": "STF",
+          "name": "Coen Van Vlijmen",
+          "amount": 1
+        },
+        "1010269": {
+          "type": "STU",
+          "name": "Reece Clark",
+          "amount": 1
+        },
+        "1010432": {
+          "type": "STU",
+          "name": "Riley Berneace Herod",
+          "amount": 1
+        },
+        "1010595": {
+          "type": "STU",
+          "name": "Ritu Singh",
+          "amount": 1
+        },
+        "1010758": {
+          "type": "STU",
+          "name": "Riya Sivakumar",
+          "amount": 1
+        },
+        "1010818": {
+          "type": "STF",
+          "name": "Ali Mohammed",
+          "amount": 1
+        },
+        "1010921": {
+          "type": "STU",
+          "name": "Sam Costers",
+          "amount": 1
+        },
+        "1011084": {
+          "type": "STU",
+          "name": "Sarina Rhmaty",
+          "amount": 1
+        },
+        "1011247": {
+          "type": "STU",
+          "name": "Selin Ogretmen",
+          "amount": 1
+        },
+        "1011410": {
+          "type": "STU",
+          "name": "Shaked Sasson",
+          "amount": 1
+        },
+        "1011419": {
+          "type": "STF",
+          "name": "Alina Comirzan",
+          "amount": 1
+        },
+        "1011573": {
+          "type": "STU",
+          "name": "Shaquil Buyne",
+          "amount": 1
+        },
+        "1011736": {
+          "type": "STU",
+          "name": "Shivansh Gupta",
+          "amount": 1
+        },
+        "1011899": {
+          "type": "STU",
+          "name": "Shu Fang",
+          "amount": 1
+        },
+        "1012020": {
+          "type": "STF",
+          "name": "Zsuzsanna Simon",
+          "amount": 1
+        },
+        "1012062": {
+          "type": "STU",
+          "name": "Solveig Strauss",
+          "amount": 1
+        },
+        "1012225": {
+          "type": "STU",
+          "name": "Takuma Shinohara",
+          "amount": 1
+        },
+        "1012388": {
+          "type": "STU",
+          "name": "Tal Turksma",
+          "amount": 1
+        },
+        "1012551": {
+          "type": "STU",
+          "name": "Tanvi Bujala",
+          "amount": 1
+        },
+        "1012621": {
+          "type": "STF",
+          "name": "Nancy O'Brien",
+          "amount": 1
+        },
+        "1012714": {
+          "type": "STU",
+          "name": "Tejovardhan Khati",
+          "amount": 1
+        },
+        "1012877": {
+          "type": "STU",
+          "name": "Teun Vuursteen",
+          "amount": 1
+        },
+        "1013040": {
+          "type": "STU",
+          "name": "Theodor Alvarado",
+          "amount": 1
+        },
+        "1013203": {
+          "type": "STU",
+          "name": "Valeria Penaranda Rodriguez",
+          "amount": 1
+        },
+        "1013222": {
+          "type": "STF",
+          "name": "Louse Foppen",
+          "amount": 1
+        },
+        "1013366": {
+          "type": "STU",
+          "name": "Yash Raghavan",
+          "amount": 1
+        },
+        "1013529": {
+          "type": "STU",
+          "name": "Zhenghan Zhong",
+          "amount": 1
+        },
+        "1013692": {
+          "type": "STU",
+          "name": "Zoya Gajewska",
+          "amount": 1
+        },
+        "1013823": {
+          "type": "STF",
+          "name": "Sara D'Orazio",
+          "amount": 1
+        },
+        "1013855": {
+          "type": "STU",
+          "name": "Pablo Amaris Paul",
+          "amount": 1
+        },
+        "1014018": {
+          "type": "STU",
+          "name": "Anya Dolgushina",
+          "amount": 1
+        },
+        "1014181": {
+          "type": "STU",
+          "name": "Rishabh Kurup",
+          "amount": 1
+        },
+        "1014344": {
+          "type": "STU",
+          "name": "Roderick Melissen",
+          "amount": 1
+        },
+        "1014424": {
+          "type": "STF",
+          "name": "Taliesine Riviere-Anderson",
+          "amount": 1
+        },
+        "1014507": {
+          "type": "STU",
+          "name": "Lemo Mogodi",
+          "amount": 1
+        },
+        "1014670": {
+          "type": "STU",
+          "name": "Demir Sakızlıoğlu",
+          "amount": 1
+        },
+        "1014833": {
+          "type": "STU",
+          "name": "Mikołaj Oworuszko",
+          "amount": 1
+        },
+        "1014996": {
+          "type": "STU",
+          "name": "Luca Guarin Stilson",
+          "amount": 1
+        },
+        "1015025": {
+          "type": "STF",
+          "name": "Jodi Melland",
+          "amount": 1
+        },
+        "1015159": {
+          "type": "STU",
+          "name": "Nellie Ullbrand",
+          "amount": 1
+        },
+        "1015322": {
+          "type": "STU",
+          "name": "Siddharth Pradeep",
+          "amount": 1
+        },
+        "1015485": {
+          "type": "STU",
+          "name": "Madi Bassigarayev",
+          "amount": 1
+        },
+        "1015626": {
+          "type": "STF",
+          "name": "Mario Prisco",
+          "amount": 1
+        },
+        "1015648": {
+          "type": "STU",
+          "name": "Daniel Schram",
+          "amount": 1
+        },
+        "1015813": {
+          "type": "STU",
+          "name": "Aleksandre Kochiashvili",
+          "amount": 1
+        },
+        "1015976": {
+          "type": "STU",
+          "name": "Francesco Procopio",
+          "amount": 1
+        },
+        "1016139": {
+          "type": "STU",
+          "name": "Katherine Throup San Juan",
+          "amount": 1
+        },
+        "1016227": {
+          "type": "STF",
+          "name": "Serwa Shodjaipoor",
+          "amount": 1
+        },
+        "1016302": {
+          "type": "STU",
+          "name": "Rafal Potega",
+          "amount": 1
+        },
+        "1016465": {
+          "type": "STU",
+          "name": "Nikita Iskortev",
+          "amount": 1
+        },
+        "1016628": {
+          "type": "STU",
+          "name": "Pars Cumali",
+          "amount": 1
+        },
+        "1016791": {
+          "type": "STU",
+          "name": "Martin Prate",
+          "amount": 1
+        },
+        "1016828": {
+          "type": "STF",
+          "name": "Tania Butler",
+          "amount": 1
+        },
+        "1016954": {
+          "type": "STU",
+          "name": "Jalen Kamenski Ivankovic",
+          "amount": 1
+        },
+        "1017117": {
+          "type": "STU",
+          "name": "Alec Lichko",
+          "amount": 1
+        },
+        "1017280": {
+          "type": "STU",
+          "name": "Evgenia Leonardivna Schwartz (Jenny)",
+          "amount": 1
+        },
+        "1017429": {
+          "type": "STF",
+          "name": "Tom Sikkes",
+          "amount": 1
+        },
+        "1017443": {
+          "type": "STU",
+          "name": "Cem Saygivar",
+          "amount": 1
+        },
+        "1017606": {
+          "type": "STU",
+          "name": "Mateo Frasson",
+          "amount": 1
+        },
+        "1017769": {
+          "type": "STU",
+          "name": "Edoardo Zeni",
+          "amount": 1
+        },
+        "1017932": {
+          "type": "STU",
+          "name": "Aryan Narvekar",
+          "amount": 1
+        },
+        "1018030": {
+          "type": "STF",
+          "name": "Johann Lukas Post",
+          "amount": 1
+        },
+        "1018631": {
+          "type": "STF",
+          "name": "Elitza Nedkova",
+          "amount": 1
+        },
+        "1019232": {
+          "type": "STF",
+          "name": "Ted Kuin",
+          "amount": 1
+        },
+        "1019833": {
+          "type": "STF",
+          "name": "Simon Verhoef",
+          "amount": 1
+        },
+        "1020434": {
+          "type": "STF",
+          "name": "Viviana Muñoz",
+          "amount": 1
+        },
+        "1021035": {
+          "type": "STF",
+          "name": "Debbie Popplewell",
+          "amount": 1
+        },
+        "1021636": {
+          "type": "STF",
+          "name": "Renu Arun",
+          "amount": 1
+        },
+        "1022237": {
+          "type": "STF",
+          "name": "Jana-Mari Conradie",
+          "amount": 1
+        },
+        "1022838": {
+          "type": "STF",
+          "name": "Douglas Nunes Da Silva",
+          "amount": 1
+        },
+        "1023439": {
+          "type": "STF",
+          "name": "Shuchita Pangasa",
+          "amount": 1
+        },
+        "1024040": {
+          "type": "STF",
+          "name": "Lilian Campos Vieira",
+          "amount": 1
+        },
+        "1024641": {
+          "type": "STF",
+          "name": "Lisa Boyle",
+          "amount": 1
+        },
+        "1025242": {
+          "type": "STF",
+          "name": "Rosana Da Nobrega Guenka",
+          "amount": 1
+        },
+        "1025843": {
+          "type": "STF",
+          "name": "Claudia Moldovan",
+          "amount": 1
+        },
+        "1026444": {
+          "type": "STF",
+          "name": "Martin Waanders",
+          "amount": 1
+        },
+        "1027045": {
+          "type": "STF",
+          "name": "Liliana Di Giovanna",
+          "amount": 1
+        },
+        "1027646": {
+          "type": "STF",
+          "name": "Jonathan Gurney",
+          "amount": 1
+        },
+        "1028247": {
+          "type": "STF",
+          "name": "Rian Richards",
+          "amount": 1
+        },
+        "1028848": {
+          "type": "STF",
+          "name": "Rosa Nin Forner",
+          "amount": 1
+        },
+        "1029449": {
+          "type": "STF",
+          "name": "Birgit Jurgens",
+          "amount": 1
+        },
+        "1030050": {
+          "type": "STF",
+          "name": "Sabrina Stremke",
+          "amount": 1
+        },
+        "1030651": {
+          "type": "STF",
+          "name": "Mag Ramachandran",
+          "amount": 1
+        },
+        "1031252": {
+          "type": "STF",
+          "name": "Ruby Bell-Williamson",
+          "amount": 1
+        },
+        "1031853": {
+          "type": "STF",
+          "name": "Lucy Wylie",
+          "amount": 1
+        },
+        "1032454": {
+          "type": "STF",
+          "name": "Antoinette van Schaick",
+          "amount": 1
+        },
+        "1033055": {
+          "type": "STF",
+          "name": "Kieran de Groote",
+          "amount": 1
+        },
+        "1033656": {
+          "type": "STF",
+          "name": "Rynette de Villiers",
+          "amount": 1
+        },
+        "1034257": {
+          "type": "STF",
+          "name": "Noorul Choudhury",
+          "amount": 1
+        },
+        "1034858": {
+          "type": "STF",
+          "name": "Maddison Turner",
+          "amount": 1
+        },
+        "1035459": {
+          "type": "STF",
+          "name": "Netty Foley",
+          "amount": 1
+        },
+        "1036060": {
+          "type": "STF",
+          "name": "Breda Kelly",
+          "amount": 1
+        },
+        "1036661": {
+          "type": "STF",
+          "name": "Eva van de Graaf",
+          "amount": 1
+        },
+        "1037262": {
+          "type": "STF",
+          "name": "Ozzy Turfanda",
+          "amount": 1
+        },
+        "1037863": {
+          "type": "STF",
+          "name": "Asha Pillai",
+          "amount": 1
+        },
+        "1038464": {
+          "type": "STF",
+          "name": "Salem Chaigre",
+          "amount": 1
+        },
+        "1039065": {
+          "type": "STF",
+          "name": "Manju Nellikkal",
+          "amount": 1
+        },
+        "1039666": {
+          "type": "STF",
+          "name": "Fay van der Kolff",
+          "amount": 1
+        },
+        "1040267": {
+          "type": "STF",
+          "name": "Susan Dimmock",
+          "amount": 1
+        },
+        "1040868": {
+          "type": "STF",
+          "name": "Adele de Vries",
+          "amount": 1
+        },
+        "1041469": {
+          "type": "STF",
+          "name": "Mick Luinge",
+          "amount": 1
+        },
+        "1042070": {
+          "type": "STF",
+          "name": "Maria Tsachnopoulou",
+          "amount": 1
+        },
+        "1042671": {
+          "type": "STF",
+          "name": "Brian Wasky",
+          "amount": 1
+        },
+        "1043272": {
+          "type": "STF",
+          "name": "Carl Rogers",
+          "amount": 1
+        },
+        "1043873": {
+          "type": "STF",
+          "name": "Maria Cristina Roldan Debernardini",
+          "amount": 1
+        },
+        "1044474": {
+          "type": "STF",
+          "name": "Belinda Bareiss",
+          "amount": 1
+        },
+        "1045075": {
+          "type": "STF",
+          "name": "Radhika Das",
+          "amount": 1
+        },
+        "1045676": {
+          "type": "STF",
+          "name": "Tamara Maas",
+          "amount": 1
+        },
+        "1046277": {
+          "type": "STF",
+          "name": "Gali Meir",
+          "amount": 1
+        },
+        "1046878": {
+          "type": "STF",
+          "name": "Sumer Carlos",
+          "amount": 1
+        },
+        "1047479": {
+          "type": "STF",
+          "name": "Claudia Casalino",
+          "amount": 1
+        },
+        "4444444": {
+          "type": "EXT",
+          "name": "Aparna Pillai",
+          "amount": 1
+        }
+      };
+
+    $('#run').bind('click', function () {
+      parse();
+    });
+
+    function parse() {
+      const input = $('#barcode').val().slice(0,7);
+      console.log(input);
+      $('#output').empty();
+      $('#type').empty();
+      $('#amount').empty();
+      $('#name').empty();
+      if (data.hasOwnProperty(input)) {
+        const type = data[input].type;
+        const name = data[input].name;
+        const amount = data[input].amount;
+        $('#type').text(type);
+        $('#name').text(name);
+        $('#amount').text(amount);
+        $('#output').html("Successful");
+      } else {
+        $('#output').html("Invalid Ticket");
+      }
+      
+    }
+
+  </script>
+</body>
+
+</html>
